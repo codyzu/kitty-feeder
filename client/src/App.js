@@ -1,14 +1,25 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Container} from 'reactstrap';
+import {Switch, Route} from 'react-router-dom';
+import firebase from './firebase-app';
 import Header from './Header';
 import FeedingPlanner from './FeedingPlanner';
+import SignIn from './SignIn';
+import FinishSignIn from './FinishSignIn';
 
 const App = () => {
+  const [user, setUser] = useState(null);
+  useEffect(() => firebase.auth().onAuthStateChanged(authUser => setUser(authUser)), []);
+
   return (
     <>
       <Header/>
       <Container>
-        <FeedingPlanner/>
+        <Switch>
+          <Route exact path="/" component={FeedingPlanner}/>
+          <Route exact path="/signin" render={props => <SignIn user={user} {...props}/>}/>
+          <Route exact path="/finishsignin" render={props => <FinishSignIn user={user} {...props}/>}/>
+        </Switch>
       </Container>
     </>
   );
