@@ -3,4 +3,5 @@ node_js:
   - "10.14.2"
 env:
   - SKIP_PREFLIGHT_CHECK=true
+script: yarn test-ci && yarn deploy-ci
 
