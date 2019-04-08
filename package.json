@@ -20,8 +20,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "pretest": "npm run write-config",
     "eject": "react-scripts eject",
-    "lint": "xo"
+    "lint": "xo",
+    "write-config": "echo $FIREBASE_CONFIG_JSON > src/firebase-config.json"
   },
   "eslintConfig": {
     "extends": "react-app"
