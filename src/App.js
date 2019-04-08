@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Container} from 'reactstrap';
-import {Switch, Route} from 'react-router-dom';
+import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import firebase from './firebase-app';
 import Header from './Header';
 import FeedingPlanner from './FeedingPlanner';
@@ -26,7 +26,7 @@ const App = () => {
   }), []);
 
   return (
-    <>
+    <BrowserRouter>
       <Header user={user}/>
       <Container>
         <Switch>
@@ -35,7 +35,7 @@ const App = () => {
           <Route exact path="/finishsignin" render={props => <FinishSignIn user={user} {...props}/>}/>
         </Switch>
       </Container>
-    </>
+    </BrowserRouter>
   );
 };
 
