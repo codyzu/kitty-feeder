@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {NavItem, Form, Input, Button, InputGroup, InputGroupAddon} from 'reactstrap';
-import {matchPath} from 'react-router-dom';
 import {MdExitToApp} from 'react-icons/md';
 import firebase from './firebase-app';
 
