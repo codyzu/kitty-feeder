@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "kitty-feeder",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -7,7 +7,7 @@
     "bootswatch": "^4.3.1",
     "firebase": "^5.9.3",
     "luxon": "^1.12.1",
-    "qs": "^6.7.0",
+    "query-string": "^6.4.2",
     "react": "^16.8.6",
     "react-day-picker": "^7.3.0",
     "react-dom": "^16.8.6",

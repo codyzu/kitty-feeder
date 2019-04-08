@@ -16,7 +16,10 @@ const FeedingPlanner = ({user}) => {
     if (user.isAdmin !== true) {
       setAlert({success: false, text: 'Only admins can add feedings'});
       setShowAlert(true);
+      return;
     }
+
+    setShowAlert(false);
   }, [user]);
 
   function handleClickedDay(day) {
