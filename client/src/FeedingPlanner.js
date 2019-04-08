@@ -1,25 +1,58 @@
 import React, {useState} from 'react';
-import {Row, Col, Card, CardHeader, CardBody, Form, FormGroup, Label, Input} from 'reactstrap';
+import {Row, Col, Card, CardHeader, CardBody, Form, FormGroup, Label, Input, Button, Spinner, Alert} from 'reactstrap';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css'; // eslint-disable-line import/no-unassigned-import
+import firebase from './firebase-app';
 
 const FeedingPlanner = () => {
   const [selectedDay, setSelectedDay] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [saving, setSaving] = useState(false);
+  const [alert, setAlert] = useState({});
+  const [showAlert, setShowAlert] = useState(false);
 
   function handleClickedDay(day) {
     setSelectedDay(day);
   }
 
+  function handleQuantityChanged(event) {
+    setQuantity(event.target.value);
+  }
+
+  async function handleAddClicked(event) {
+    console.log('clicked:', quantity, selectedDay);
+    event.preventDefault();
+
+    setSaving(true);
+    try {
+      await firebase.firestore().collection('feedings').doc().set({
+        when: selectedDay,
+        quantity: Number.parseFloat(quantity)
+      });
+      setAlert({success: true, text: 'Feeding successfully added'});
+    } catch (error) {
+      setAlert({success: false, text: 'Error saving feeding'});
+    } finally {
+      setSaving(false);
+      setShowAlert(true);
+    }
+  }
+
   return (
     <>
       <Row className="mt-4">
-        <Col><h1>Schedule a feeding</h1></Col>
+        <Col>
+          <h1>Schedule a feeding</h1>
+        </Col>
       </Row>
       <Row>
         <Col>
           <Card>
             <CardHeader tag="h3">Feeding options</CardHeader>
             <CardBody>
+              <Alert color={alert.success ? 'success' : 'danger'} isOpen={showAlert} toggle={() => setShowAlert(false)}>
+                {alert.text}
+              </Alert>
               <Form>
                 <FormGroup>
                   <Label for="feed-date">Date</Label>
@@ -28,7 +61,7 @@ const FeedingPlanner = () => {
               </Form>
             </CardBody>
             <CardBody>
-              <Form>
+              <Form disabled={saving} onSubmit={handleAddClicked}>
                 <FormGroup row>
                   <Label className="col-sm-12" for="feed-date2">Date</Label>
                   <DayPicker
@@ -43,6 +76,25 @@ const FeedingPlanner = () => {
                     onDayClick={handleClickedDay}
                   />
                 </FormGroup>
+                <FormGroup>
+                  <Label for="quantitySelect">Quantity</Label>
+                  <Input type="select" name="quantity" id="quantitySelect" onChange={handleQuantityChanged}>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                  </Input>
+                </FormGroup>
+                <Button>
+                  { saving ? <Spinner/> : '' }
+                  { saving ? ' Saving...' : 'Save'}
+                </Button>
               </Form>
             </CardBody>
           </Card>
