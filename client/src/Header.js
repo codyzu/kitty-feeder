@@ -8,7 +8,7 @@ const RoutedNavLink = ({to, label}) => (
   </Route>
 );
 
-const Header = () => {
+const Header = ({user}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   function toggle() {
@@ -33,6 +33,9 @@ const Header = () => {
             </NavItem>
           </Nav>
         </Collapse>
+        <NavItem className="navbar-text">
+          {user.isGuest === false ? user.email : 'Please sign in...'}
+        </NavItem>
       </Navbar>
     </Container>
   );

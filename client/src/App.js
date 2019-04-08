@@ -28,7 +28,7 @@ const App = () => {
 
   return (
     <>
-      <Header/>
+      <Header user={user}/>
       <Container>
         <Switch>
           <Route exact path="/" component={BrowseFeedings}/>
