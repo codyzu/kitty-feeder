@@ -31,7 +31,8 @@ async function finishSignIn(location, history) {
       }
 
       // The client SDK will parse the code from the link for you.
-      const result = await firebase.auth().signInWithEmailLink(email, window.location.href);
+      // const result = await firebase.auth().signInWithEmailLink(email, window.location.href);
+      await firebase.auth().signInWithEmailLink(email, window.location.href);
       // Clear email from storage.
       console.log('deleting email');
       window.localStorage.removeItem('emailForSignIn');
