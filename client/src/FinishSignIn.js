@@ -6,7 +6,7 @@ const FinishSignIn = ({user}) => {
     finishSignIn();
   }, []);
 
-  return user ? <h1>Signed in as {user.email}</h1> : <h1>Completing Sign In...</h1>;
+  return user.isGuest === false ? <h1>Signed in as {user.email}</h1> : <h1>Completing Sign In...</h1>;
 };
 
 async function finishSignIn() {

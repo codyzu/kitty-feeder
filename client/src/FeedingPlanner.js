@@ -1,15 +1,23 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Row, Col, Card, CardHeader, CardBody, Form, FormGroup, Label, Input, Button, Spinner, Alert} from 'reactstrap';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css'; // eslint-disable-line import/no-unassigned-import
 import firebase from './firebase-app';
 
-const FeedingPlanner = () => {
+const FeedingPlanner = ({user}) => {
   const [selectedDay, setSelectedDay] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [saving, setSaving] = useState(false);
   const [alert, setAlert] = useState({});
   const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    console.log('user:', user);
+    if (user.isAdmin !== true) {
+      setAlert({success: false, text: 'Only admins can add feedings'});
+      setShowAlert(true);
+    }
+  }, [user]);
 
   function handleClickedDay(day) {
     setSelectedDay(day);
@@ -18,6 +26,8 @@ const FeedingPlanner = () => {
   function handleQuantityChanged(event) {
     setQuantity(event.target.value);
   }
+
+  const disableForm = (user.isAdmin !== true || saving === true);
 
   async function handleAddClicked(event) {
     console.log('clicked:', quantity, selectedDay);
@@ -61,7 +71,7 @@ const FeedingPlanner = () => {
               </Form>
             </CardBody>
             <CardBody>
-              <Form disabled={saving} onSubmit={handleAddClicked}>
+              <Form onSubmit={handleAddClicked}>
                 <FormGroup row>
                   <Label className="col-sm-12" for="feed-date2">Date</Label>
                   <DayPicker
@@ -91,7 +101,7 @@ const FeedingPlanner = () => {
                     <option>10</option>
                   </Input>
                 </FormGroup>
-                <Button>
+                <Button disabled={disableForm}>
                   { saving ? <Spinner/> : '' }
                   { saving ? ' Saving...' : 'Save'}
                 </Button>

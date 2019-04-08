@@ -9,8 +9,22 @@ import SignIn from './SignIn';
 import FinishSignIn from './FinishSignIn';
 
 const App = () => {
-  const [user, setUser] = useState(null);
-  useEffect(() => firebase.auth().onAuthStateChanged(authUser => setUser(authUser)), []);
+  const [user, setUser] = useState({authDone: false, isGuest: true, isAdmin: false});
+  useEffect(() => firebase.auth().onAuthStateChanged(async authUser => {
+    if (authUser === null) {
+      setUser({authDone: true, isGuest: true, isAdmin: false});
+      return;
+    }
+
+    const adminSnapshot = await firebase.firestore().collection('admins').doc(authUser.uid).get();
+    setUser({
+      authDone: true,
+      isGuest: false,
+      email: authUser.email,
+      uid: authUser.uid,
+      isAdmin: adminSnapshot.exists
+    });
+  }), []);
 
   return (
     <>
@@ -18,7 +32,7 @@ const App = () => {
       <Container>
         <Switch>
           <Route exact path="/" component={BrowseFeedings}/>
-          <Route exact path="/add" component={FeedingPlanner}/>
+          <Route exact path="/add" render={props => <FeedingPlanner user={user} {...props}/>}/>
           <Route exact path="/signin" render={props => <SignIn user={user} {...props}/>}/>
           <Route exact path="/finishsignin" render={props => <FinishSignIn user={user} {...props}/>}/>
         </Switch>

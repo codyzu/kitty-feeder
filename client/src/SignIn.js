@@ -31,7 +31,7 @@ const SignIn = ({user}) => {
     }
   }
 
-  return user ?
+  return user.isGuest === false ?
     (
       <Row>
         <Col>
