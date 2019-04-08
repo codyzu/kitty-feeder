@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
-import {Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
+import {NavItem, Form, Input, Button, InputGroup, InputGroupAddon} from 'reactstrap';
+import {matchPath} from 'react-router-dom';
+import {MdExitToApp} from 'react-icons/md';
 import firebase from './firebase-app';
 
-const SignIn = ({user}) => {
+const User = ({user, location}) => {
   const [email, setEmail] = useState('');
 
   function onEmailChange(event) {
@@ -14,7 +16,7 @@ const SignIn = ({user}) => {
       const actionCodeSettings = {
         // URL you want to redirect back to. The domain (www.example.com) for this
         // URL must be whitelisted in the Firebase Console.
-        url: `${window.location.protocol}//${window.location.host}/finishsignin`,
+        url: `${window.location.protocol}//${window.location.host}/finishsignin?redirect=${location.pathname}`,
         // This must be true.
         handleCodeInApp: true
       };
@@ -31,28 +33,27 @@ const SignIn = ({user}) => {
     }
   }
 
-  return user.isGuest === false ?
-    (
-      <Row>
-        <Col>
-          <h1>Already signed in as {user.email}</h1>
-          <Button onClick={() => firebase.auth().signOut()}>Sign Out</Button>
-        </Col>
-      </Row>
-    ) :
-    (
-      <Row>
-        <Col>
-          <Form>
-            <FormGroup>
-              <Label for="signInEmail">Email</Label>
-              <Input type="email" name="email" id="signInEmail" placeholder="you@email.com" value={email} onChange={onEmailChange}/>
-            </FormGroup>
-            <Button onClick={doSignIn}>Sign In</Button>
-          </Form>
-        </Col>
-      </Row>
+  if (user.isGuest) {
+    return (
+      <Form inline>
+        <InputGroup>
+          <Input required name="email" id="signInEmail" type="email" placeholder="email address" value={email} onChange={onEmailChange}/>
+          <InputGroupAddon addonType="append">
+            <Button color="primary" onClick={doSignIn}>SignIn</Button>
+          </InputGroupAddon>
+        </InputGroup>
+      </Form>
     );
+  }
+
+  return (
+    <>
+      <NavItem className="navbar-text">
+        {user.email}
+      </NavItem>
+      <Button title="Sign Out" color="link" onClick={() => firebase.auth().signOut()}><MdExitToApp/></Button>
+    </>
+  );
 };
 
-export default SignIn;
+export default User;

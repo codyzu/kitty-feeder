@@ -1,29 +1,32 @@
 import React, {useEffect} from 'react';
+import qs from 'query-string';
+import {matchPath} from 'react-router-dom';
 import firebase from './firebase-app';
 
-const FinishSignIn = ({user}) => {
+const FinishSignIn = ({user, location, history}) => {
   useEffect(() => {
-    finishSignIn();
-  }, []);
+    console.log('LOC:', location);
+    finishSignIn(location, history);
+  }, [location, history]);
 
   return user.isGuest === false ? <h1>Signed in as {user.email}</h1> : <h1>Completing Sign In...</h1>;
 };
 
-async function finishSignIn() {
+async function finishSignIn(location, history) {
   try {
-    // Confirm the link is a sign-in with email link.
+  // Confirm the link is a sign-in with email link.
     if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
-      // Additional state parameters can also be passed via URL.
-      // This can be used to continue the user's intended action before triggering
-      // the sign-in operation.
-      // Get the email if available. This should be available if the user completes
-      // the flow on the same device where they started it.
+    // Additional state parameters can also be passed via URL.
+    // This can be used to continue the user's intended action before triggering
+    // the sign-in operation.
+    // Get the email if available. This should be available if the user completes
+    // the flow on the same device where they started it.
       console.log('fetching email');
       let email = window.localStorage.getItem('emailForSignIn');
       console.log('Stored email:', email);
       if (!email) {
-        // User opened the link on a different device. To prevent session fixation
-        // attacks, ask the user to provide the associated email again. For example:
+      // User opened the link on a different device. To prevent session fixation
+      // attacks, ask the user to provide the associated email again. For example:
         email = window.prompt('Please provide your email for confirmation');
       }
 
@@ -37,6 +40,14 @@ async function finishSignIn() {
       // result.additionalUserInfo.profile == null
       // You can check if the user is new or existing:
       // result.additionalUserInfo.isNewUser
+
+      const {redirect} = qs.parse(location.search);
+      if (redirect === undefined || matchPath(redirect, {path: location.pathname})) {
+        history.push('/');
+        return;
+      }
+
+      history.push(redirect);
     }
   } catch (error) {
     console.error(error);
