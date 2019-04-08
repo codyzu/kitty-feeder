@@ -30,7 +30,6 @@ const FeedingPlanner = ({user}) => {
   const disableForm = (user.isAdmin !== true || saving === true);
 
   async function handleAddClicked(event) {
-    console.log('clicked:', quantity, selectedDay);
     event.preventDefault();
 
     setSaving(true);
@@ -42,6 +41,7 @@ const FeedingPlanner = ({user}) => {
       setAlert({success: true, text: 'Feeding successfully added'});
     } catch (error) {
       setAlert({success: false, text: 'Error saving feeding'});
+      console.error(error);
     } finally {
       setSaving(false);
       setShowAlert(true);
