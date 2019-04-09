@@ -13,6 +13,7 @@ const BrowseFeedings = () => {
   return (
     <Row>
       <Col>
+        Welcome Tetras!
         <Table striped>
           <thead>
             <tr>
