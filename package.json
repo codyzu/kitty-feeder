@@ -7,13 +7,13 @@
     "bootswatch": "^4.3.1",
     "firebase": "^5.9.3",
     "luxon": "^1.12.1",
-    "query-string": "^6.4.2",
+    "query-string": "^6.5.0",
     "react": "^16.8.6",
     "react-day-picker": "^7.3.0",
     "react-dom": "^16.8.6",
-    "react-icons": "^3.5.0",
+    "react-icons": "^3.6.1",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8",
+    "react-scripts": "3.0.0",
     "reactstrap": "^8.0.0"
   },
   "scripts": {
@@ -40,7 +40,7 @@
   ],
   "devDependencies": {
     "eslint-config-xo-react": "^0.19.0",
-    "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-react": "^7.13.0",
     "eslint-plugin-react-hooks": "^1.4.0",
     "firebase-tools": "^6.5.3",
     "xo": "^0.24.0"
