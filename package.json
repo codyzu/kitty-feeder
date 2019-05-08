@@ -27,6 +27,7 @@
     "write-config": "echo $FIREBASE_CONFIG_JSON > src/firebase-config.json",
     "firebase": "firebase",
     "deploy": "firebase deploy",
+    "predeploy": "yarn build",
     "deploy-ci": "yarn deploy --project=$FIREBASE_PROJECT"
   },
   "eslintConfig": {
